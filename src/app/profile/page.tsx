@@ -7,7 +7,7 @@ import LoginPopup from "../components/LoginPopup";
 import Header from "../components/Header";
 
 export default function ProfilePage() {
-  const { isAuthenticated, authToken } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { showLoginPopup, setShowLoginPopup } = useRequireAuth({
     showPopup: true,
   });
@@ -85,7 +85,7 @@ export default function ProfilePage() {
                 User Profile
               </h1>
               <p className="text-gray-600">
-                Welcome back! Here's your profile information.
+                Welcome back! Here&apos;s your profile information.
               </p>
             </div>
           </div>

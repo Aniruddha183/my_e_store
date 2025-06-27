@@ -6,8 +6,9 @@ import ProductReviews from "../../components/ProductReviews";
 import Modal from "../../components/Modal";
 import { Product } from "../../types";
 import Header from "@/app/components/Header";
+
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 async function getProduct(id: string): Promise<Product> {
@@ -43,22 +44,23 @@ export default function ProductDetailPage({ params }: PageProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productData = await getProduct(params.id);
+        const resolvedParams = await params;
+        const productData = await getProduct(resolvedParams.id);
         setProduct(productData);
         setActiveImage(productData.image);
         const allProductsData = await getAllProducts();
         setAllProducts(allProductsData);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to fetch product";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
     };
 
-    if (params.id) {
-      fetchData();
-    }
-  }, [params.id]);
+    fetchData();
+  }, [params]);
 
   const productImages = useMemo(() => {
     if (!product) return [];
@@ -251,7 +253,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             ))}
           </div>
         </div>
-        <ProductReviews rating={product.rating} />
+        <ProductReviews />
         <div className="mt-20">
           <h2 className="text-2xl font-bold mb-6 text-center">
             Popular this week

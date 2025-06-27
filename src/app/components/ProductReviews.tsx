@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { DisplayStars } from "./StarRating";
-import { Rating } from "../types";
 
 interface Review {
   id: number;
@@ -15,10 +14,6 @@ interface Review {
   helpful: number;
   verified: boolean;
   avatar: string;
-}
-
-interface ProductReviewsProps {
-  rating: Rating;
 }
 
 const topics = [
@@ -229,7 +224,7 @@ const allReviews: Review[] = [
   },
 ];
 
-export default function ProductReviews({ rating }: ProductReviewsProps) {
+export default function ProductReviews() {
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);

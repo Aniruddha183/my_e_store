@@ -42,8 +42,10 @@ export default function LoginPopup({
         onClose();
         router.push(redirectTo);
       }, 1500);
-    } catch (err: any) {
-      setError(err.message || "Failed to login.");
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to login.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -149,7 +151,7 @@ export default function LoginPopup({
         {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <button
               onClick={() => {
                 onClose();

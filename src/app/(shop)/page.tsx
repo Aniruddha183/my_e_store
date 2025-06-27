@@ -33,8 +33,10 @@ export default function ProductListPage() {
       try {
         const products = await getProducts();
         setAllProducts(products);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to fetch products";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

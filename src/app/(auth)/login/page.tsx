@@ -44,8 +44,10 @@ export default function LoginPage() {
       setTimeout(() => {
         router.push("/");
       }, 1500);
-    } catch (err: any) {
-      setError(err.message || "Failed to login.");
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to login.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

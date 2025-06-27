@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo, ChangeEvent, MouseEvent } from "react";
 import Link from "next/link";
-import { DisplayStars, StarRating } from "@/app/components/StarRating";
 import Header from "@/app/components/Header";
 import { Product } from "@/app/types";
 
@@ -35,8 +34,10 @@ export default function ProductListPage() {
       try {
         const products = await getProducts();
         setAllProducts(products);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to fetch products";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

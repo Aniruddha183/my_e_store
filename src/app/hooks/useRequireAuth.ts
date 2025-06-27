@@ -10,7 +10,7 @@ interface UseRequireAuthOptions {
 }
 
 export function useRequireAuth(options: UseRequireAuthOptions = {}) {
-  const { redirectTo = "/", showPopup = true } = options;
+  const { showPopup = true } = options;
   const { isAuthenticated, authToken } = useAuth();
   const router = useRouter();
   const [showLoginPopup, setShowLoginPopup] = useState(false);
