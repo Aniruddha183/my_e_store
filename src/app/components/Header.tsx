@@ -4,6 +4,7 @@ import { ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface HeaderProps {
   searchTerm: string;
@@ -13,6 +14,7 @@ interface HeaderProps {
 export default function Header({ searchTerm, onSearchChange }: HeaderProps) {
   const { authToken, logout } = useAuth();
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     logout();
@@ -62,12 +64,47 @@ export default function Header({ searchTerm, onSearchChange }: HeaderProps) {
 
           {/* Right Navigation */}
           <nav className="flex items-center space-x-6 text-sm text-neutral-700">
- 
             <button className="hover:text-gray-900">Become a Seller</button>
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle Dark Mode"
+              className="hover:text-gray-900 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {theme === "dark" ? (
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m16.66 4.95l-.71-.71M4.05 4.05l-.71-.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"
+                  />
+                </svg>
+              )}
+            </button>
             {authToken ? (
               <>
                 <span className="text-green-600 font-medium">Welcome!</span>
-           
+
                 <Link href="/profile" className="hover:text-gray-900">
                   Profile
                 </Link>

@@ -4,6 +4,7 @@ import "./globals.css";
 import Footer from "./components/Footer";
 import { ReactNode } from "react";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,15 +16,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} bg-white font-sans text-neutral-800`}
-      >
-        <AuthProvider>
-          <div className="flex flex-col min-h-screen">
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
-        </AuthProvider>
+      <body className={`${inter.className} font-sans`}>
+        <ThemeProvider>
+          <AuthProvider>
+            <div className="flex flex-col min-h-screen">
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </div>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

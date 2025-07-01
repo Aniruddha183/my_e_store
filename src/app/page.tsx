@@ -22,7 +22,7 @@ export default function ProductListPage() {
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [priceFilter, setPriceFilter] = useState<{ min: number; max: number }>({
     min: 0,
-    max: 1000,
+    max: 16000,
   });
   const [ratingFilter, setRatingFilter] = useState<number>(0);
   const [sortBy, setSortBy] = useState<string>("popular");
@@ -64,7 +64,7 @@ export default function ProductListPage() {
     if (categoryFilter.length > 0)
       products = products.filter((p) => categoryFilter.includes(p.category));
     products = products.filter(
-      (p) => p.price >= priceFilter.min && p.price <= priceFilter.max
+      (p) => p.price * 80 >= priceFilter.min && p.price * 80 <= priceFilter.max
     );
     if (ratingFilter > 0)
       products = products.filter(
@@ -226,7 +226,7 @@ export default function ProductListPage() {
                   <h4 className="text-base font-medium text-gray-900">Price</h4>
                   <button
                     onClick={() => {
-                      setPriceFilter({ min: 0, max: 1000 });
+                      setPriceFilter({ min: 0, max: 16000 });
                       setCurrentPage(1);
                     }}
                     className="text-xs text-blue-600 hover:text-blue-800"
@@ -238,10 +238,10 @@ export default function ProductListPage() {
                 <div className="px-1">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-sm text-gray-600">
-                      ₹{priceFilter.min}
+                      ₹{priceFilter.min.toLocaleString()}
                     </span>
                     <span className="text-sm text-gray-600">
-                      ₹{priceFilter.max}
+                      ₹{priceFilter.max.toLocaleString()}
                     </span>
                   </div>
 
@@ -253,7 +253,8 @@ export default function ProductListPage() {
                     <input
                       type="range"
                       min="0"
-                      max="1000"
+                      max="16000"
+                      step="100"
                       value={priceFilter.min}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         const newMin = Number(e.target.value);
@@ -265,9 +266,9 @@ export default function ProductListPage() {
                       className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                       style={{
                         background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${
-                          (priceFilter.min / 1000) * 100
+                          (priceFilter.min / 16000) * 100
                         }%, #e5e7eb ${
-                          (priceFilter.min / 1000) * 100
+                          (priceFilter.min / 16000) * 100
                         }%, #e5e7eb 100%)`,
                       }}
                     />
@@ -281,7 +282,8 @@ export default function ProductListPage() {
                     <input
                       type="range"
                       min="0"
-                      max="1000"
+                      max="16000"
+                      step="100"
                       value={priceFilter.max}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         const newMax = Number(e.target.value);
@@ -293,9 +295,9 @@ export default function ProductListPage() {
                       className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                       style={{
                         background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${
-                          (priceFilter.max / 1000) * 100
+                          (priceFilter.max / 16000) * 100
                         }%, #e5e7eb ${
-                          (priceFilter.max / 1000) * 100
+                          (priceFilter.max / 16000) * 100
                         }%, #e5e7eb 100%)`,
                       }}
                     />
@@ -303,31 +305,29 @@ export default function ProductListPage() {
 
                   <div className="flex justify-between mt-2 text-xs text-gray-500">
                     <span>₹0</span>
-                    <span>₹1000</span>
+                    <span>₹16,000</span>
                   </div>
                 </div>
               </div>
 
               {/* Rating Filter */}
               <div>
-                <button className="flex items-center justify-between w-full mb-4">
+                <div className="flex items-center justify-between mb-4">
                   <h4 className="text-base font-medium text-gray-900">
                     Rating
                   </h4>
-                  <svg
-                    className="w-5 h-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
+                  {ratingFilter > 0 && (
+                    <button
+                      onClick={() => {
+                        setRatingFilter(0);
+                        setCurrentPage(1);
+                      }}
+                      className="text-xs text-blue-600 hover:text-blue-800"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
 
                 <div className="space-y-2">
                   {[5, 4, 3, 2, 1].map((rating) => (
@@ -340,7 +340,10 @@ export default function ProductListPage() {
                         name="rating"
                         value={rating}
                         checked={ratingFilter === rating}
-                        onChange={() => setRatingFilter(rating)}
+                        onChange={() => {
+                          setRatingFilter(ratingFilter === rating ? 0 : rating);
+                          setCurrentPage(1);
+                        }}
                         className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                       />
                       <div className="ml-3 flex items-center">
